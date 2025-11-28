@@ -8,7 +8,7 @@
     <!-- فونت -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
     
-    <!-- اسکریپت‌های وب‌اپلیکیشن -->
+    <!-- اسکریپت‌های وب‌اپلیکیشن ایتا -->
     <script src="https://developer.eitaa.com/eitaa-web-app.js"></script>
 
     <style>
@@ -368,53 +368,55 @@
 
     <script>
         // ============================================================
-        // 🚀 تابع مدیریت باز کردن لینک‌ها (قلب تغییرات جدید)
+        // 🚀 تابع مدیریت باز کردن لینک‌ها (فقط ایتا)
         // ============================================================
         function openDeepLink(url) {
             // اگر در محیط ایتا و متد مخصوص آن موجود باشد
             if (window.Eitaa && window.Eitaa.WebApp && typeof window.Eitaa.WebApp.openEitaaLink === 'function') {
                 window.Eitaa.WebApp.openEitaaLink(url);
             } 
-            // برای اطمینان، اگر تلگرام بود (چون گاهی ایتا با نام تلگرام لود می‌شود)
-            else if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function' && url.includes('t.me')) {
-                window.Telegram.WebApp.openTelegramLink(url);
-            }
-            // حالت fallback برای محیط‌های تست یا اگر روش‌های بالا کار نکرد
+            // حالت fallback برای محیط‌های تست یا مرورگر معمولی
             else {
                 window.open(url, '_blank');
             }
         }
 
         // ============================================================
-        // 🚀 لاجیک تمام صفحه و تشخیص ایتا/تلگرام
+        // 🚀 لاجیک تمام صفحه اختصاصی ایتا
         // ============================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            // *** اصلاح مهم: حذف وابستگی به وجود WebApp برای نمایش اولیه ***
             const appContainer = document.getElementById('app-container');
             
-            // نمایش اجباری کانتینر در هر حالتی
+            // نمایش کانتینر
             if(appContainer) {
                 appContainer.style.display = 'block';
             }
 
-            const WebApp = window.Telegram?.WebApp || window.Eitaa?.WebApp;
+            // چک کردن وجود آبجکت ایتا
+            if (window.Eitaa && window.Eitaa.WebApp) {
+                // تعریف متغیر برای استفاده از کد شما
+                const EitaaWebApp = window.Eitaa.WebApp;
 
-            if (!WebApp) {
-                console.warn('No WebApp detected. Running in Browser Mode.');
-                // دیگر return نمی‌کنیم تا کد در مرورگر هم اجرا شود
-            } else {
-                WebApp.ready();
-                // منطق تمام صفحه
-                try {
-                    if (WebApp.isVersionAtLeast && WebApp.isVersionAtLeast('8.0')) {
-                        WebApp.requestFullscreen();
-                    } else if (WebApp.expand) {
-                        WebApp.expand();
-                    }
-                } catch (e) {
-                    try { WebApp.expand(); } catch (err) {}
+                // --- کد درخواستی شما برای تمام صفحه ---
+                // اعلان آمادگی به ایتا
+                EitaaWebApp.ready();
+
+                // درخواست حالت تمام صفحه
+                if (EitaaWebApp.requestFullscreen) {
+                    EitaaWebApp.requestFullscreen();
+                } else if (EitaaWebApp.expand) { // برای نسخه‌های قدیمی‌تر یا اندروید
+                    EitaaWebApp.expand();
                 }
+
+                // گوش دادن به رویداد تغییر حالت تمام صفحه (اختیاری)
+                if (typeof EitaaWebApp.onEvent === 'function') {
+                    EitaaWebApp.onEvent('fullscreenChanged', function() {
+                        // وضعیت تمام صفحه تغییر کرد
+                    });
+                }
+            } else {
+                console.warn('Eitaa WebApp SDK not found or not running inside Eitaa.');
             }
         });
 
