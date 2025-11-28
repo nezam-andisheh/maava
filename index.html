@@ -526,7 +526,8 @@
                 });
                 contentHtml += '</div>';
             }
-            card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img" onerror="this.src='${getPlaceholder(globalIndex)}'"></div>
+            // loading="lazy" added here
+            card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img" loading="lazy" onerror="this.src='${getPlaceholder(globalIndex)}'"></div>
                               <div class="card-body"><div class="card-title">${chapter.title}</div>${contentHtml}</div>`;
             return card;
         }
@@ -558,10 +559,11 @@
                 imgStyle = 'filter: grayscale(100%); opacity: 0.7;';
             }
 
+            // loading="lazy" added here
             container.innerHTML = `
                 <div class="special-session-container">
                     <div class="${cardClass}">
-                        <img src="${data.image}" class="special-img" alt="${data.title}" style="${imgStyle}" onerror="this.style.display='none'">
+                        <img src="${data.image}" class="special-img" alt="${data.title}" style="${imgStyle}" loading="lazy" onerror="this.style.display='none'">
                         <div class="special-content">
                             <div class="special-title">🌟 ${data.title}</div>
                             ${descHtml}
@@ -573,7 +575,8 @@
 
         function renderDivider(id, imageUrl, fallbackText) {
             const el = document.getElementById(id);
-            if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'divider-fallback\\'>${fallbackText}</div>'">`;
+            // loading="lazy" added here
+            if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}" loading="lazy" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'divider-fallback\\'>${fallbackText}</div>'">`;
             else el.innerHTML = `<div class="divider-fallback">${fallbackText}</div>`;
         }
 
