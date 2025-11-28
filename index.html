@@ -553,7 +553,7 @@
             
             if (data.link) {
                 const introLogic = isIntro ? `localStorage.setItem('intro_watched', 'true'); setTimeout(()=>location.reload(), 1000);` : '';
-                btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;">ورود به جلسه ویژه</a>`;
+                btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;"مشاهده این جلسه</a>`;
             } else {
                 btnHtml = `<div class="special-btn disabled">🔒 به زودی...</div>`;
                 imgStyle = 'filter: grayscale(100%); opacity: 0.7;';
