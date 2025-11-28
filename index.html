@@ -35,7 +35,8 @@
             user-select: none;
         }
 
-
+        /* در اینجا display: none را حذف کردیم تا اگر جاوااسکریپت به مشکل خورد، صفحه سفید نماند */
+        /* اما چون می‌خواهید لودینگ کنترل شود، با JS آن را مدیریت می‌کنیم */
         #app-container { display: none; }
 
         /* --- هدر و لوگوها --- */
@@ -167,7 +168,7 @@
             text-decoration: none;
             transition: transform 0.2s;
             font-size: 0.9rem;
-            cursor: pointer; /* اضافه شده برای نشانگر موس */
+            cursor: pointer; 
         }
         
         .special-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--special-border); }
@@ -344,9 +345,9 @@
         
         <header>
             <div class="logos-container">
-                <div class="logo-box"><img src="logo/مأوا_اصلی_سفید_luyk.png" alt="لوگو مأوا"></div>
-                <div class="logo-box"><img src="logo/دوره.png" alt="لوگو دوره"></div>
-                <div class="logo-box"><img src="logo/معرفتی.png" alt="لوگو ۳"></div>
+                <div class="logo-box"><img src="logo/مأوا_اصلی_سفید_luyk.png" alt="لوگو مأوا" onerror="this.style.display='none'"></div>
+                <div class="logo-box"><img src="logo/دوره.png" alt="لوگو دوره" onerror="this.style.display='none'"></div>
+                <div class="logo-box"><img src="logo/معرفتی.png" alt="لوگو ۳" onerror="this.style.display='none'"></div>
             </div>
             <h1> دوره جامع نظام اندیشه اسلامی</h1>
             <p style="color:#94a3b8; font-size:0.85rem;">دسترسی سریع به ویدیوهای آموزشی</p>
@@ -389,28 +390,31 @@
         // ============================================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            const errorOverlay = document.getElementById('eitaa-only-overlay');
+            // *** اصلاح مهم: حذف وابستگی به وجود WebApp برای نمایش اولیه ***
             const appContainer = document.getElementById('app-container');
+            
+            // نمایش اجباری کانتینر در هر حالتی
+            if(appContainer) {
+                appContainer.style.display = 'block';
+            }
+
             const WebApp = window.Telegram?.WebApp || window.Eitaa?.WebApp;
 
             if (!WebApp) {
-                console.warn('No WebApp detected. Access denied.');
-                return; 
-            }
-
-            errorOverlay.style.display = 'none';
-            appContainer.style.display = 'block';
-            WebApp.ready();
-
-            // منطق تمام صفحه
-            try {
-                if (WebApp.isVersionAtLeast && WebApp.isVersionAtLeast('8.0')) {
-                    WebApp.requestFullscreen();
-                } else if (WebApp.expand) {
-                    WebApp.expand();
+                console.warn('No WebApp detected. Running in Browser Mode.');
+                // دیگر return نمی‌کنیم تا کد در مرورگر هم اجرا شود
+            } else {
+                WebApp.ready();
+                // منطق تمام صفحه
+                try {
+                    if (WebApp.isVersionAtLeast && WebApp.isVersionAtLeast('8.0')) {
+                        WebApp.requestFullscreen();
+                    } else if (WebApp.expand) {
+                        WebApp.expand();
+                    }
+                } catch (e) {
+                    try { WebApp.expand(); } catch (err) {}
                 }
-            } catch (e) {
-                try { WebApp.expand(); } catch (err) {}
             }
         });
 
@@ -512,7 +516,6 @@
                         const btnClass = isWatched ? 'btn btn-watched' : 'btn btn-active';
                         const label = isWatched ? '✓' : 'مشاهده';
                         
-                        // تغییر: استفاده از openDeepLink در onclick
                         contentHtml += `<a href="javascript:void(0);" class="${btnClass}" onclick="openDeepLink('${ep.link}'); markAsWatched('${uniqueId}', this); return false;">
                                 <div class="btn-info"><span>🎥 جلسه ${sessionNum}</span>${ep.time ? `<span class="time-badge">${ep.time}</span>` : ''}</div><span>${label}</span></a>`;
                     } else {
@@ -521,7 +524,7 @@
                 });
                 contentHtml += '</div>';
             }
-            card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img"></div>
+            card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img" onerror="this.src='${getPlaceholder(globalIndex)}'"></div>
                               <div class="card-body"><div class="card-title">${chapter.title}</div>${contentHtml}</div>`;
             return card;
         }
@@ -547,7 +550,6 @@
             
             if (data.link) {
                 const introLogic = isIntro ? `localStorage.setItem('intro_watched', 'true'); setTimeout(()=>location.reload(), 1000);` : '';
-                // تغییر: استفاده از openDeepLink و ترکیب با لاجیک مقدمه
                 btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;">ورود به جلسه ویژه</a>`;
             } else {
                 btnHtml = `<div class="special-btn disabled">🔒 به زودی...</div>`;
@@ -557,7 +559,7 @@
             container.innerHTML = `
                 <div class="special-session-container">
                     <div class="${cardClass}">
-                        <img src="${data.image}" class="special-img" alt="${data.title}" style="${imgStyle}">
+                        <img src="${data.image}" class="special-img" alt="${data.title}" style="${imgStyle}" onerror="this.style.display='none'">
                         <div class="special-content">
                             <div class="special-title">🌟 ${data.title}</div>
                             ${descHtml}
@@ -569,7 +571,7 @@
 
         function renderDivider(id, imageUrl, fallbackText) {
             const el = document.getElementById(id);
-            if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}">`;
+            if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'divider-fallback\\'>${fallbackText}</div>'">`;
             else el.innerHTML = `<div class="divider-fallback">${fallbackText}</div>`;
         }
 
