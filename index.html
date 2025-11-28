@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>آلبوم جامع دوره نظام اندیشه</title>
+    
+    <!-- فونت -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
+    
+    <!-- اسکریپت‌های وب‌اپلیکیشن -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://developer.eitaa.com/eitaa-web-app.js"></script>
+
+    <style>
+        :root {
+            --bg: hsl(189, 90%, 8%);
+            --card: #1e293b;
+            --white-gold: hsl(0, 0%, 94%);
+            --teal: #14b8a6;
+            --text: #f8fafc;
+            --disabled: #334155;
+            --watched: #064e3b;
+            --special-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --special-border: #f59e0b;
+        }
+        
+        body { 
+            font-family: 'Vazirmatn', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 60px 10px 20px 10px;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* --- استایل پیام خطا --- */
+        #eitaa-only-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error-box {
+            background: var(--card);
+            border: 2px solid var(--special-border);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .error-icon { font-size: 4rem; margin-bottom: 20px; }
+        .error-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: var(--special-border);
+            color: #000;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        #app-container { display: none; }
+
+        /* --- هدر و لوگوها --- */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--white-gold);
+        }
+
+        .logos-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        
+        .logo-box:hover { transform: scale(1.05); }
+
+        .logo-box img {
+            max-height: 75px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.1));
+        }
+
+        h1 { 
+            color: var(--white-gold); 
+            margin: 0 0 8px 0; 
+            font-size: 1.4rem;
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- جداکننده‌ها --- */
+        .section-divider {
+            width: 100%;
+            margin: 20px 0 10px 0;
+            text-align: center;
+        }
+
+        .section-divider img {
+            max-width: 100%;
+            height: auto;
+            max-height: 85px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .divider-fallback {
+            color: var(--white-gold);
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-bottom: 1px solid var(--teal);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .shelf-container { margin-bottom: 15px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- جلسات ویژه --- */
+        .special-session-container {
+            max-width: 800px;
+            margin: 15px auto;
+        }
+
+        .special-card {
+            background: var(--special-bg);
+            border: 2px solid var(--special-border);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .special-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--special-border), transparent);
+        }
+
+        .special-img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .special-content { width: 100%; }
+        
+        .special-title {
+            font-size: 1.2rem;
+            color: var(--special-border);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .special-btn {
+            background: var(--special-border);
+            color: #000;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: transform 0.2s;
+            font-size: 0.9rem;
+            cursor: pointer; /* اضافه شده برای نشانگر موس */
+        }
+        
+        .special-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--special-border); }
+        
+        .special-btn.disabled {
+            background: var(--disabled);
+            color: #94a3b8;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* استایل اختصاصی برای Intro کوچک */
+        .intro-compact-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 10px;
+            gap: 15px;
+            text-align: right;
+        }
+
+        .intro-compact-card .special-img {
+            max-width: 90px;
+            max-height: 90px;
+            margin-bottom: 0;
+            object-fit: cover;
+        }
+
+        .intro-compact-card .special-title {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .intro-compact-card .special-desc {
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .intro-compact-card .special-btn {
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            width: auto;
+            display: inline-block;
+        }
+
+        /* دکمه مشاهده مجدد */
+        .rewatch-btn {
+            background: transparent;
+            border: 1px solid var(--special-border);
+            color: var(--special-border);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-block;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .rewatch-btn:hover {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* --- کارت‌های معمولی --- */
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-width: 260px; 
+        }
+
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--white-gold); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 135px;
+            background: #0f172a;
+            border-bottom: 2px solid var(--white-gold);
+            overflow: hidden;
+        }
+
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .card:hover .card-img { transform: scale(1.05); }
+
+        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .card-title {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--white-gold);
+            text-align: center;
+        }
+
+        .card.grayscale-mode .card-img { filter: grayscale(100%); opacity: 0.5; }
+        .card.grayscale-mode .card-title { color: #94a3b8; }
+        .card.grayscale-mode { border-color: #334155; }
+
+        .ep-list { display: flex; flex-direction: column; gap: 7px; }
+
+        .btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .btn-info { display: flex; align-items: center; gap: 6px; }
+        .time-badge { font-size: 0.7rem; background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 4px; color: #cbd5e1; font-family: 'Vazirmatn', sans-serif; }
+        
+        .btn-active { background: rgba(20, 184, 166, 0.1); color: var(--teal); border: 1px solid var(--teal); }
+        .btn-active:hover { background: var(--teal); color: #fff; }
+        
+        .btn-watched { background: var(--watched); color: #a7f3d0; border: 1px solid #059669; }
+        .btn-watched:hover { background: #047857; }
+        .btn-watched::after { content: '✓'; position: absolute; left: 8px; font-weight: bold; }
+        
+        .btn-disabled { background: var(--disabled); color: #94a3b8; cursor: default; opacity: 0.6; border: 1px solid transparent; }
+        
+        .coming-soon-overlay { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #64748b; padding: 15px 0; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed #334155; }
+        .coming-soon-icon { font-size: 1.8rem; margin-bottom: 8px; opacity: 0.5; }
+
+        /* --- استایل مخصوص موبایل --- */
+        @media (max-width: 768px) {
+            .grid {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 20px;
+                gap: 15px;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none; 
+            }
+            .grid::-webkit-scrollbar { display: none; }
+            
+            .card {
+                scroll-snap-align: center;
+                min-width: 85%;
+            }
+
+            .special-card.intro-compact-card { flex-direction: row; }
+            .special-card { flex-direction: column; }
+            .section-divider img { max-height: 50px; }
+        }
+        
+        @media (min-width: 769px) {
+            .special-card { flex-direction: row; text-align: right; gap: 20px; }
+            .special-title { text-align: right; }
+            .special-btn { width: auto; display: inline-block; padding: 10px 40px; }
+        }
+
+        .footer { text-align: center; margin-top: 50px; color: #64748b; font-size: 0.75rem; padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- پیام خطا -->
+    <div id="eitaa-only-overlay">
+        <div class="error-box">
+            <div class="error-icon">⚠️</div>
+            <h2>دسترسی محدود است</h2>
+            <p style="color:#ccc; margin:15px 0;">این داشبورد فقط در محیط وب‌اپلیکیشن ایتا قابل مشاهده است.</p>
+            <p>لطفاً از طریق ربات یا لینک داخلی ایتا وارد شوید.</p>
+            <a href="https://eitaa.com" class="error-btn">بازگشت به ایتا</a>
+        </div>
+    </div>
+
+    <!-- کانتینر اصلی -->
+    <div id="app-container">
+        
+        <header>
+            <div class="logos-container">
+                <div class="logo-box"><img src="https://s6.uupload.ir/files/مأوا_اصلی_سفید_luyk.png" alt="لوگو مأوا"></div>
+                <div class="logo-box"><img src="https://s6.uupload.ir/files/picsart_25-11-27_19-42-22-089_7htd.png" alt="لوگو معاونت"></div>
+                <div class="logo-box"><img src="https://s6.uupload.ir/files/negar_1764260689236_jlxc.png" alt="لوگو ۳"></div>
+            </div>
+            <h1>💎 دوره جامع نظام اندیشه اسلامی</h1>
+            <p style="color:#94a3b8; font-size:0.85rem;">دسترسی سریع به ویدیوهای آموزشی</p>
+        </header>
+
+        <div id="intro-container"></div>
+        <div class="section-divider" id="div-mabani"></div>
+        <div class="shelf-container"><div class="grid" id="mabani-root"></div></div>
+        <div class="section-divider" id="div-nezamat"></div>
+        <div class="shelf-container"><div class="grid" id="nezamat-root"></div></div>
+        <div class="section-divider" id="div-tatbighat"></div>
+        <div class="shelf-container"><div class="grid" id="tatbighat-root"></div></div>
+        <div id="outro-container"></div>
+
+        <div class="footer">طراحی شده جهت سهولت دسترسی طلاب و پژوهشگران محترم</div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 🚀 تابع مدیریت باز کردن لینک‌ها (قلب تغییرات جدید)
+        // ============================================================
+        function openDeepLink(url) {
+            // اگر در محیط ایتا و متد مخصوص آن موجود باشد
+            if (window.Eitaa && window.Eitaa.WebApp && typeof window.Eitaa.WebApp.openEitaaLink === 'function') {
+                window.Eitaa.WebApp.openEitaaLink(url);
+            } 
+            // برای اطمینان، اگر تلگرام بود (چون گاهی ایتا با نام تلگرام لود می‌شود)
+            else if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.openTelegramLink === 'function' && url.includes('t.me')) {
+                window.Telegram.WebApp.openTelegramLink(url);
+            }
+            // حالت fallback برای محیط‌های تست یا اگر روش‌های بالا کار نکرد
+            else {
+                window.open(url, '_blank');
+            }
+        }
+
+        // ============================================================
+        // 🚀 لاجیک تمام صفحه و تشخیص ایتا/تلگرام
+        // ============================================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorOverlay = document.getElementById('eitaa-only-overlay');
+            const appContainer = document.getElementById('app-container');
+            const WebApp = window.Telegram?.WebApp || window.Eitaa?.WebApp;
+
+            if (!WebApp) {
+                console.warn('No WebApp detected. Access denied.');
+                return; 
+            }
+
+            errorOverlay.style.display = 'none';
+            appContainer.style.display = 'block';
+            WebApp.ready();
+
+            // منطق تمام صفحه
+            try {
+                if (WebApp.isVersionAtLeast && WebApp.isVersionAtLeast('8.0')) {
+                    WebApp.requestFullscreen();
+                } else if (WebApp.expand) {
+                    WebApp.expand();
+                }
+            } catch (e) {
+                try { WebApp.expand(); } catch (err) {}
+            }
+        });
+
+        // ============================================================
+        // 🛠 بخش مدیریت محتوا
+        // ============================================================
+
+        const introSession = {
+            title: "جلسه مقدماتی: آشنایی",
+            image: "https://s6.uupload.ir/files/اشنایییییییییییییییییییییییییییییییی_u869.jpg",
+            link: "https://eitaa.com/link_moghaddame",
+            desc: "چرا به منظومه فکری نیاز داریم؟"
+        };
+
+        const outroSession = {
+            title: "جلسه پایانی: جمع‌بندی نظام‌مند",
+            image: "https://s6.uupload.ir/files/جمعععععععععععععععععععععع_5tw7.jpg",
+            link: "", 
+            desc: "مرور کلان مباحث و ترسیم درختواره نهایی"
+        };
+
+        const separators = {
+            mabani: "https://s6.uupload.ir/files/مبانی_22dc.png",
+            nezamat: "https://s6.uupload.ir/files/نظامات_1sy5.png",
+            tatbighat: "https://s6.uupload.ir/files/تطبیقات_p5xa.png"
+        };
+
+        const allChapters = [
+            // 1 تا 5: مبانی
+            { 
+                title: "۱. مبانی معرفت‌شناسانه", 
+                image: "https://s6.uupload.ir/files/مبانی_معرفت_شناسانه_3prg.jpg", 
+                episodes: [
+                    { link: "https://eitaa.com/nezam_andisheh", time: "15:30" }, 
+                    { link: "https://eitaa.com/example2", time: "22:10" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { title: "۲. مبانی هستی‌شناسانه", image: "https://s6.uupload.ir/files/مبانی_انسان_شناسانه_2wcm.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۳. مبانی انسان‌شناسانه", image: "https://s6.uupload.ir/files/انسان_v7l.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۴. مبانی جامعه‌شناسانه", image: "https://s6.uupload.ir/files/مبانی_جامعه_شناسانه_4a7e.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۵. مبانی دین‌شناسانه", image: "https://s6.uupload.ir/files/مبانی_دین_شناسانه_gclz.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            
+            // 6 تا 10: نظامات
+            { title: "۶. نظام زندگی فرد در اسلام", image: "https://s6.uupload.ir/files/نظام_زندگی_فرد_در_اسلام_976h.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۷. نظام خانواده در اسلام", image: "https://s6.uupload.ir/files/نظام_خانواده_در_اسلام_f5hd.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۸. نظام اجتماعی فرهنگ در اسلام", image: "https://s6.uupload.ir/files/نظام_اجتماعی_فرهنگ_در_اسلام_3zdl.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۹. نظام اجتماعی سیاست در اسلام", image: "https://s6.uupload.ir/files/نظام_اجتماعی_سیاست_در_اسلام_uti6.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۱۰. نظام اجتماعی اقتصاد در اسلام", image: "https://s6.uupload.ir/files/نظام_اجتماعی_اقتصاد_در_اسلام_lrmw.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            
+            // 11 تا 15: تطبیقات
+            { title: "۱۱. تاریخ اسلام", image: "https://s6.uupload.ir/files/تاریخ_اسلام_wxoi.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۱۲. جریان روشنفکری در ایران", image: "https://s6.uupload.ir/files/جریان_روشنفکری_در_ایران_dksw.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۱۳. معنویت اسلامی و معنویت‌های نوپدید", image: "https://s6.uupload.ir/files/معنویت_اسلامی_و_معنویت_های_نوپدید_myr.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۱۴. رسانه و جنگ شناختی", image: "https://s6.uupload.ir/files/رسانه_و_جنگ_شناختی_3oru.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { title: "۱۵. آینده تمدنی بشر", image: "https://s6.uupload.ir/files/آینده_تمدنی_بشر_oa8y.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] }
+        ];
+
+        // ============================================================
+        // ⛔️ موتور رندرینگ
+        // ============================================================
+        
+        const getWatchedList = () => JSON.parse(localStorage.getItem('watchedEpisodes')) || [];
+        const saveWatched = (id) => {
+            const list = getWatchedList();
+            if (!list.includes(id)) { list.push(id); localStorage.setItem('watchedEpisodes', JSON.stringify(list)); }
+        };
+
+        function getPlaceholder(index) {
+            const colors = ['115e59', '0f766e', '0e7490', '0369a1', '1d4ed8', '7e22ce', 'be123c'];
+            return `https://placehold.co/600x400/${colors[index % colors.length]}/ffffff?text=Fasl+${index + 1}`;
+        }
+
+        function toPersianNum(n) {
+            const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return n.toString().replace(/\d/g, x => farsiDigits[x]);
+        }
+
+        function createCard(chapter, globalIndex) {
+            const card = document.createElement('div');
+            const isChapterEmpty = chapter.episodes.every(ep => ep.link.trim() === "");
+            
+            card.className = isChapterEmpty ? 'card grayscale-mode' : 'card';
+            
+            const imgUrl = chapter.image.trim() === "" ? getPlaceholder(globalIndex) : chapter.image;
+            
+            let contentHtml = '';
+            if (isChapterEmpty) {
+                contentHtml = `<div class="coming-soon-overlay"><div class="coming-soon-icon">⏳</div><div>به زودی...</div></div>`;
+            } else {
+                contentHtml = '<div class="ep-list">';
+                chapter.episodes.forEach((ep, epIndex) => {
+                    const uniqueId = `${globalIndex}-${epIndex}`;
+                    const isWatched = getWatchedList().includes(uniqueId);
+                    const sessionNum = toPersianNum(epIndex + 1); 
+                    
+                    if (ep.link.trim() !== "") {
+                        const btnClass = isWatched ? 'btn btn-watched' : 'btn btn-active';
+                        const label = isWatched ? '✓' : 'مشاهده';
+                        
+                        // تغییر: استفاده از openDeepLink در onclick
+                        contentHtml += `<a href="javascript:void(0);" class="${btnClass}" onclick="openDeepLink('${ep.link}'); markAsWatched('${uniqueId}', this); return false;">
+                                <div class="btn-info"><span>🎥 جلسه ${sessionNum}</span>${ep.time ? `<span class="time-badge">${ep.time}</span>` : ''}</div><span>${label}</span></a>`;
+                    } else {
+                        contentHtml += `<div class="btn btn-disabled"><span>🔒 جلسه ${sessionNum}</span><span>...</span></div>`;
+                    }
+                });
+                contentHtml += '</div>';
+            }
+            card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img"></div>
+                              <div class="card-body"><div class="card-title">${chapter.title}</div>${contentHtml}</div>`;
+            return card;
+        }
+
+        function renderSpecialSession(containerId, data, isIntro = false) {
+            const container = document.getElementById(containerId);
+            
+            if (isIntro && localStorage.getItem('intro_watched') === 'true') {
+                container.innerHTML = `
+                    <div style="text-align: center; margin: 20px auto;">
+                        <a href="javascript:void(0);" onclick="openDeepLink('${data.link}'); return false;" class="rewatch-btn">
+                           🔄 مشاهده مجدد جلسه مقدماتی
+                        </a>
+                    </div>`;
+                return;
+            }
+
+            const cardClass = isIntro ? 'special-card intro-compact-card' : 'special-card';
+            const descHtml = isIntro ? `<span class="special-desc">${data.desc}</span>` : `<p style="color:#ccc; margin-bottom:15px;">${data.desc}</p>`;
+
+            let btnHtml = '';
+            let imgStyle = '';
+            
+            if (data.link) {
+                const introLogic = isIntro ? `localStorage.setItem('intro_watched', 'true'); setTimeout(()=>location.reload(), 1000);` : '';
+                // تغییر: استفاده از openDeepLink و ترکیب با لاجیک مقدمه
+                btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;">ورود به جلسه ویژه</a>`;
+            } else {
+                btnHtml = `<div class="special-btn disabled">🔒 به زودی...</div>`;
+                imgStyle = 'filter: grayscale(100%); opacity: 0.7;';
+            }
+
+            container.innerHTML = `
+                <div class="special-session-container">
+                    <div class="${cardClass}">
+                        <img src="${data.image}" class="special-img" alt="${data.title}" style="${imgStyle}">
+                        <div class="special-content">
+                            <div class="special-title">🌟 ${data.title}</div>
+                            ${descHtml}
+                            ${btnHtml}
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderDivider(id, imageUrl, fallbackText) {
+            const el = document.getElementById(id);
+            if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}">`;
+            else el.innerHTML = `<div class="divider-fallback">${fallbackText}</div>`;
+        }
+
+        renderSpecialSession('intro-container', introSession, true);
+        renderSpecialSession('outro-container', outroSession, false);
+        
+        renderDivider('div-mabani', separators.mabani, 'مبانی نظری');
+        renderDivider('div-nezamat', separators.nezamat, 'نظامات اجتماعی');
+        renderDivider('div-tatbighat', separators.tatbighat, 'تطبیقات عصری');
+
+        const mabaniRoot = document.getElementById('mabani-root');
+        const nezamatRoot = document.getElementById('nezamat-root');
+        const tatbighatRoot = document.getElementById('tatbighat-root');
+
+        allChapters.forEach((chapter, index) => {
+            const card = createCard(chapter, index);
+            if (index < 5) mabaniRoot.appendChild(card);
+            else if (index < 10) nezamatRoot.appendChild(card);
+            else tatbighatRoot.appendChild(card);
+        });
+
+        function markAsWatched(id, element) {
+            saveWatched(id);
+            element.classList.remove('btn-active');
+            element.classList.add('btn-watched');
+        }
+
+    </script>
+</body>
+</html>
