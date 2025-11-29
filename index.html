@@ -35,8 +35,6 @@
             user-select: none;
         }
 
-        /* در اینجا display: none را حذف کردیم تا اگر جاوااسکریپت به مشکل خورد، صفحه سفید نماند */
-        /* اما چون می‌خواهید لودینگ کنترل شود، با JS آن را مدیریت می‌کنیم */
         #app-container { display: none; }
 
         /* --- هدر و لوگوها --- */
@@ -444,6 +442,7 @@
             tatbighat: "pic/تطبیقات.png"
         };
 
+        // در اینجا تمام فصل‌ها باز شده‌اند تا ویرایش لینک و زمان راحت‌تر باشد
         const allChapters = [
             // 1 تا 5: مبانی
             { 
@@ -456,24 +455,150 @@
                     { link: "", time: "" }
                 ] 
             },
-            { title: "۲. مبانی هستی‌شناسانه", image: "pic/هستی.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۳. مبانی انسان‌شناسانه", image: "pic/انسان.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۴. مبانی جامعه‌شناسانه", image: "pic/جامعه.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۵. مبانی دین‌شناسانه", image: "pic/دین.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { 
+                title: "۲. مبانی هستی‌شناسانه", 
+                image: "pic/هستی.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۳. مبانی انسان‌شناسانه", 
+                image: "pic/انسان.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۴. مبانی جامعه‌شناسانه", 
+                image: "pic/جامعه.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۵. مبانی دین‌شناسانه", 
+                image: "pic/دین.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
             
             // 6 تا 10: نظامات
-            { title: "۶. نظام زندگی فرد در اسلام", image: "pic/فرد.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۷. نظام خانواده در اسلام", image: "pic/خانواده.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۸. نظام اجتماعی فرهنگ در اسلام", image: "pic/فرهنگ.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۹. نظام اجتماعی سیاست در اسلام", image: "pic/سیاست.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۱۰. نظام اجتماعی اقتصاد در اسلام", image: "pic/اقتصاد.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
+            { 
+                title: "۶. نظام زندگی فرد در اسلام", 
+                image: "pic/فرد.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۷. نظام خانواده در اسلام", 
+                image: "pic/خانواده.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۸. نظام اجتماعی فرهنگ در اسلام", 
+                image: "pic/فرهنگ.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۹. نظام اجتماعی سیاست در اسلام", 
+                image: "pic/سیاست.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۱۰. نظام اجتماعی اقتصاد در اسلام", 
+                image: "pic/اقتصاد.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
             
             // 11 تا 15: تطبیقات
-            { title: "۱۱. تاریخ اسلام", image: "pic/تاریخ.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۱۲. جریان روشنفکری در ایران", image: "pic/جریان.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۱۳. معنویت اسلامی و معنویت‌های نوپدید", image: "pic/معنویت.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۱۴. رسانه و جنگ شناختی", image: "pic/رسانه.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] },
-            { title: "۱۵. آینده تمدنی بشر", image: "pic/آینده.jpg", episodes: [{ link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }, { link: "", time: "" }] }
+            { 
+                title: "۱۱. تاریخ اسلام", 
+                image: "pic/تاریخ.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۱۲. جریان روشنفکری در ایران", 
+                image: "pic/جریان.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۱۳. معنویت اسلامی و معنویت‌های نوپدید", 
+                image: "pic/معنویت.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۱۴. رسانه و جنگ شناختی", 
+                image: "pic/رسانه.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            },
+            { 
+                title: "۱۵. آینده تمدنی بشر", 
+                image: "pic/آینده.jpg", 
+                episodes: [
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }, 
+                    { link: "", time: "" }
+                ] 
+            }
         ];
 
         // ============================================================
@@ -519,14 +644,14 @@
                         const label = isWatched ? '✓' : 'مشاهده';
                         
                         contentHtml += `<a href="javascript:void(0);" class="${btnClass}" onclick="openDeepLink('${ep.link}'); markAsWatched('${uniqueId}', this); return false;">
-                                <div class="btn-info"><span>🎥 جلسه ${sessionNum}</span>${ep.time ? `<span class="time-badge">${ep.time}</span>` : ''}</div><span>${label}</span></a>`;
+                                        <div class="btn-info"><span>🎥 جلسه ${sessionNum}</span>${ep.time ? `<span class="time-badge">${ep.time}</span>` : ''}</div><span>${label}</span></a>`;
                     } else {
                         contentHtml += `<div class="btn btn-disabled"><span>🔒 جلسه ${sessionNum}</span><span>...</span></div>`;
                     }
                 });
                 contentHtml += '</div>';
             }
-            // loading="lazy" added here
+            
             card.innerHTML = `<div class="card-img-container"><img src="${imgUrl}" alt="${chapter.title}" class="card-img" loading="lazy" onerror="this.src='${getPlaceholder(globalIndex)}'"></div>
                               <div class="card-body"><div class="card-title">${chapter.title}</div>${contentHtml}</div>`;
             return card;
@@ -553,13 +678,12 @@
             
             if (data.link) {
                 const introLogic = isIntro ? `localStorage.setItem('intro_watched', 'true'); setTimeout(()=>location.reload(), 1000);` : '';
-                btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;"مشاهده این جلسه</a>`;
+                btnHtml = `<a href="javascript:void(0);" class="special-btn" onclick="openDeepLink('${data.link}'); ${introLogic} return false;">مشاهده این جلسه</a>`;
             } else {
                 btnHtml = `<div class="special-btn disabled">🔒 به زودی...</div>`;
                 imgStyle = 'filter: grayscale(100%); opacity: 0.7;';
             }
 
-            // loading="lazy" added here
             container.innerHTML = `
                 <div class="special-session-container">
                     <div class="${cardClass}">
@@ -575,7 +699,6 @@
 
         function renderDivider(id, imageUrl, fallbackText) {
             const el = document.getElementById(id);
-            // loading="lazy" added here
             if (imageUrl) el.innerHTML = `<img src="${imageUrl}" alt="${fallbackText}" loading="lazy" onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'divider-fallback\\'>${fallbackText}</div>'">`;
             else el.innerHTML = `<div class="divider-fallback">${fallbackText}</div>`;
         }
