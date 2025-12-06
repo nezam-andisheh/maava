@@ -445,16 +445,16 @@
             
             // متن پیام دعوت (قابل ویرایش)
             const message = `سلام! 🌹
-        شما توسط ${inviterName} به «دوره جامع نظام اندیشه» دعوت شده‌اید.
+        شما توسط ${inviterName} به «دوره نظام جامع نظام اندیشه اسلامی» دعوت شده‌اید.
         
         📚 جامع‌ترین دوره برای معماری ذهن و پاسخ به شبهات روز.
         👇👇`;
         
             // لینک کانال یا ربات
-            const link = 'https://eitaa.com/nezam_andisheh'; 
+            const link = 'https://eitaa.com/maava_andishe_app/hayat?btn=مشاهده.دوره'; 
         
             // ساخت لینک اشتراک گذاری استاندارد ایتا
-            const shareUrl = `https://eitaa.com/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`;
+            const shareUrl = `https://eitaa.com/share/url?text=${encodeURIComponent(message + "\n" + link)}`;
             
             // باز کردن لینک شیر با تابع openDeepLink که قبلا در کد داشتید
             openDeepLink(shareUrl);
