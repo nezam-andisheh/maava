@@ -356,6 +356,41 @@
             .special-title { text-align: right; }
             .special-btn { width: auto; display: inline-block; padding: 10px 40px; }
         }
+                /* --- استایل دکمه شناور دعوت (جدید) --- */
+        .floating-share-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: pulse 2s infinite; /* انیمیشن ضربان */
+        }
+        
+        .floating-share-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.6);
+        }
+        
+        .floating-share-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: #000; /* رنگ آیکون مشکی */
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
 
         .footer { text-align: center; margin-top: 50px; color: #64748b; font-size: 0.75rem; padding: 20px; }
     </style>
@@ -385,10 +420,45 @@
         <div id="outro-container"></div>
 
         <div class="footer">طراحی شده جهت سهولت دسترسی طلاب و پژوهشگران محترم</div>
+        <!-- دکمه شناور دعوت -->
+        <a href="javascript:void(0);" onclick="shareCourse()" class="floating-share-btn">
+            <!-- آیکون اشتراک‌گذاری SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
+            </svg>
+        </a>
 
     </div>
 
     <script>
+        // ============================================================
+// 📢 تابع اشتراک گذاری هوشمند
+// ============================================================
+        function shareCourse() {
+            // دریافت اطلاعات کاربر از ایتا/تلگرام
+            const WebApp = window.Telegram?.WebApp || window.Eitaa?.WebApp;
+            const user = WebApp?.initDataUnsafe?.user;
+            
+            // تعیین نام دعوت کننده (اگر نام کاربر موجود بود از آن استفاده کن، وگرنه "یک دوست")
+            // این قسمت جادویی ماجراست که اسم کاربر رو اتوماتیک برمیداره
+            const inviterName = (user && user.first_name) ? user.first_name : 'یک دوست';
+            
+            // متن پیام دعوت (قابل ویرایش)
+            const message = `سلام! 🌹
+        شما توسط ${inviterName} به «دوره جامع نظام اندیشه» دعوت شده‌اید.
+        
+        📚 جامع‌ترین دوره برای معماری ذهن و پاسخ به شبهات روز.
+        👇👇`;
+        
+            // لینک کانال یا ربات
+            const link = 'https://eitaa.com/nezam_andisheh'; 
+        
+            // ساخت لینک اشتراک گذاری استاندارد ایتا
+            const shareUrl = `https://eitaa.com/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`;
+            
+            // باز کردن لینک شیر با تابع openDeepLink که قبلا در کد داشتید
+            openDeepLink(shareUrl);
+        }
         // ============================================================
         // 🚀 تابع مدیریت باز کردن لینک‌ها (فقط ایتا)
         // ============================================================
