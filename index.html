@@ -791,8 +791,8 @@
             
             // --- تعریف دکمه ثبت نام ---
             // لطفا لینک ثبت نام را در خط زیر جایگزین # کنید
-            const regLink = "https://formafzar.com/form/aq7vf"; 
-            const regBtn = `<a href="javascript:void(0);" class="special-btn reg-style" onclick="openDeepLink('${regLink}'); return false;">ثبت نام طلاب برادر</a>`;
+            const regLink = "#"; 
+            const regBtn = `<a href="javascript:void(0);" class="special-btn reg-style" onclick="window.open('${regLink}', '_blank'); return false;">ثبت نام طلاب برادر</a>`;
             // -------------------------
 
             if (isIntro && localStorage.getItem('intro_watched') === 'true') {
