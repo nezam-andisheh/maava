@@ -793,7 +793,7 @@
             // --- تعریف دکمه ثبت نام ---
             // لطفا لینک ثبت نام را در خط زیر جایگزین # کنید
             const regLink = "https://formafzar.com/form/aq7vf"; 
-            const regBtn = `<a href="javascript:void(0);" class="special-btn reg-style" onclick="window.open('${regLink}', '_blank'); return false;">ثبت نام طلاب برادر</a>`;
+            const regBtn = `<a href="javascript:void(0);" class="special-btn reg-style" onclick="openExternal('${regLink}'); return false;">ثبت نام طلاب برادر</a>`;
             // -------------------------
 
             if (isIntro && localStorage.getItem('intro_watched') === 'true') {
@@ -872,6 +872,19 @@
             element.classList.add('btn-watched');
         }
 
+        // ============================================================
+        // 🌐 تابع باز کردن لینک در مرورگر خارجی (کروم/سافاری)
+        // ============================================================
+        function openExternal(url) {
+            // بررسی وجود متد مخصوص خروج از ایتا
+            if (window.Eitaa && window.Eitaa.WebApp && typeof window.Eitaa.WebApp.openLink === 'function') {
+                window.Eitaa.WebApp.openLink(url);
+            } 
+            // حالت جایگزین برای تست در مرورگر کامپیوتر
+            else {
+                window.open(url, '_blank');
+            }
+        }
     </script>
 </body>
 </html>
