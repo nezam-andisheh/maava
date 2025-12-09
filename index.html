@@ -207,6 +207,18 @@
             transform: none;
         }
 
+        /* استایل دکمه ثبت نام - اضافه شده */
+        .reg-style {
+            background: #2563eb !important; /* رنگ آبی */
+            color: #fff !important;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        .reg-style:hover {
+            background: #1d4ed8 !important;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+        }
+
         /* استایل اختصاصی برای Intro کوچک */
         .intro-compact-card {
             display: flex;
@@ -777,12 +789,22 @@
         function renderSpecialSession(containerId, data, isIntro = false) {
             const container = document.getElementById(containerId);
             
+            // --- تعریف دکمه ثبت نام ---
+            // لطفا لینک ثبت نام را در خط زیر جایگزین # کنید
+            const regLink = "https://formafzar.com/form/aq7vf"; 
+            const regBtn = `<a href="javascript:void(0);" class="special-btn reg-style" onclick="openDeepLink('${regLink}'); return false;">ثبت نام طلاب برادر</a>`;
+            // -------------------------
+
             if (isIntro && localStorage.getItem('intro_watched') === 'true') {
                 container.innerHTML = `
                     <div style="text-align: center; margin: 20px auto;">
                         <a href="javascript:void(0);" onclick="openDeepLink('${data.link}'); return false;" class="rewatch-btn">
                            🔄 مشاهده مجدد جلسه مقدماتی
                         </a>
+                        <!-- نمایش دکمه ثبت نام بعد از مشاهده جلسه -->
+                        <div style="margin-top: 15px; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto;">
+                            ${regBtn}
+                        </div>
                     </div>`;
                 return;
             }
@@ -799,6 +821,11 @@
             } else {
                 btnHtml = `<div class="special-btn disabled">🔒 به زودی...</div>`;
                 imgStyle = 'filter: grayscale(100%); opacity: 0.7;';
+            }
+            
+            // اگر جلسه مقدماتی است، دکمه ثبت نام را زیر دکمه مشاهده اضافه کن
+            if (isIntro) {
+                btnHtml += regBtn;
             }
 
             container.innerHTML = `
